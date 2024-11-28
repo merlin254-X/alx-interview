@@ -1,23 +1,25 @@
 #!/usr/bin/python3
-"""
-Module to solve the making change problem
-"""
+"""Making change O(n)"""
+
 
 def makeChange(coins, total):
-    # If total is 0 or negative, no coins are needed
-    if total <= 0:
+    """Clasic Bottom-Up dynamic programming"""
+    temp_value = 0
+    coins.sort(reverse=True)
+
+    if total < 0:
         return 0
-    
-    # Initialize a DP array with a value higher than any possible number of coins
-    dp = [float('inf')] * (total + 1)
-    
-    # Base case: 0 total requires 0 coins
-    dp[0] = 0
-    
-    # Iterate over all coin denominations
+
     for coin in coins:
-        for amount in range(coin, total + 1):
-            dp[amount] = min(dp[amount], dp[amount - coin] + 1)
-    
-    # If dp[total] is still infinity, it's not possible to form the total
-    return dp[total] if dp[total] != float('inf') else -1
+        if total % coin <= total:
+            temp_value += total // coin
+            total = total % coin
+
+    return temp_value if total == 0 else -1
+
+
+if __name__ == '__main__':
+
+    print(makeChange([1, 2, 25], 37))
+
+    print(makeChange([1256, 54, 48, 16, 102], 1453))
